@@ -1,8 +1,17 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.gowux15.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-db = client.dbsparta
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+MONGO_URL = os.environ.get('MONGODB_URL')
+DB_NAME = os.environ.get('DB_NAME')
+
+client = MongoClient(MONGO_URL)
+db = client[DB_NAME]
 
 app = Flask(__name__)
 
@@ -46,4 +55,4 @@ def bucket_delete():
     return ({'msg': 'Deleted!'})
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=3000, debug=True)
